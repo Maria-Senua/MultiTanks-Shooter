@@ -4993,6 +4993,7 @@ GameObject:
   - component: {fileID: 1469944514}
   - component: {fileID: 1469944513}
   - component: {fileID: 1469944516}
+  - component: {fileID: 1469944518}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5118,6 +5119,31 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1469944518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469944512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3703507471
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &1518094121
 GameObject:
   m_ObjectHideFlags: 0
@@ -6509,7 +6535,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1834527956}
-    PlayerPrefab: {fileID: 5913185089736441629, guid: 29c1078ff43464207b4852e416f6a95c, type: 3}
+    PlayerPrefab: {fileID: 3729350640037515439, guid: 593a079a44a45ad4299af17144e51fb7, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 74ba77ff6992f40a6b4cd062857de896, type: 2}
@@ -6672,7 +6698,7 @@ GameObject:
   - component: {fileID: 1906082325}
   - component: {fileID: 1906082324}
   - component: {fileID: 1906082323}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8094,8 +8120,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 169.125, y: -78.09999}
-  m_SizeDelta: {x: 338.25, y: 45.399994}
+  m_AnchoredPosition: {x: 70.875, y: -70}
+  m_SizeDelta: {x: 141.75, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &5951666669962090979
 RectTransform:
@@ -8386,8 +8412,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 169.125, y: -22.699997}
-  m_SizeDelta: {x: 338.25, y: 45.399994}
+  m_AnchoredPosition: {x: 70.875, y: -20}
+  m_SizeDelta: {x: 141.75, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8902792424610079038
 MonoBehaviour:
