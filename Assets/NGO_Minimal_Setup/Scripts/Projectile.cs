@@ -6,6 +6,7 @@ public class Projectile : NetworkBehaviour
 {
     [SerializeField] float lifeTime = 5f;
     [SerializeField] GameObject explosion;
+    public float damage = 10;
 
     void Start()
     {
