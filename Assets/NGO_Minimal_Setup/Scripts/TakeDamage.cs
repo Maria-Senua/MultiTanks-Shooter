@@ -35,6 +35,21 @@ public class TakeDamage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (health >= 70)
+        {
+            healthText.color = new Color32(86, 188, 58, 255);
+        }
+        else if (health < 70 && health >= 40)
+        {
+            healthText.color = new Color32(231, 150, 12, 255);
+        }
+        else if (health < 40)
+        {
+            healthText.color = new Color32(224, 20, 20, 255);
+        }
+        if (health <= 0)
+        {
+            //add Game over or sth
+        }
     }
 }
