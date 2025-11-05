@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 1971547747455730413}
   - component: {fileID: 2432662025738054964}
   - component: {fileID: 204675031341838195}
+  - component: {fileID: 7798126939348702758}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -552,6 +553,27 @@ MonoBehaviour:
   healthText: {fileID: 8240936842214679177}
   damageText: {fileID: 2966780126972999949}
   health: 100
+--- !u!65 &7798126939348702758
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3729350640037515439}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.73548377, z: 1}
+  m_Center: {x: 0, y: 0.13225812, z: 0}
 --- !u!1 &4454688794962605258
 GameObject:
   m_ObjectHideFlags: 0
