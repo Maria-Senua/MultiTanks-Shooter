@@ -1,34 +1,25 @@
 using Unity.Netcode;
 using UnityEngine;
 
-// turret aiming: point towards mouse-on-ground
-// trick: remember last valid hit so when the ray misses,
-// we keep the previous direction instead of snapping/freezing.
+// Controls turret rotation (Y) and barrel elevation (X) with smooth mouse movement
 public class TankTurretAim : NetworkBehaviour
 {
-    [Header("Refs")]
-    [SerializeField] Transform tankBody;     // base of the tank (position ref)
-    [SerializeField] Transform turretPivot;  // rotates only this (upper part)
-    [SerializeField] LayerMask groundMask;   // set to your "Ground" layer
-    [SerializeField] float rotationSpeed = 8f;
+    [Header("References")]
+    [SerializeField] private Transform turretPivot;   // rotates horizontally (Y)
+    [SerializeField] private Transform barrelPivot;   // rotates vertically (X)
 
-    Camera cam;
+    [Header("Settings")]
+    [SerializeField] private float horizontalSpeed = 8f;   // more responsive
+    [SerializeField] private float verticalSpeed = 6f;
+    [SerializeField] private float rotationSmoothness = 10f; // smooth motion
+    [SerializeField] private float minPitch = -5f;   // lower angle limit
+    [SerializeField] private float maxPitch = 25f;   // upper angle limit
 
-    // network-sync so everyone sees the same turret direction
-    NetworkVariable<Quaternion> netTurretRot = new(
-        default,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Owner
-    );
+    private float yaw;   // horizontal rotation
+    private float pitch; // vertical rotation
 
-    // last valid aim target (prevents tiny stutters when ray misses)
-    Vector3 lastAimPoint;
-    bool hasAimPoint = false;
-
-    void Start()
-    {
-        if (IsOwner) cam = Camera.main;
-    }
+    private NetworkVariable<float> syncedYaw = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    private NetworkVariable<float> syncedPitch = new(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     void Update()
     {
@@ -36,47 +27,49 @@ public class TankTurretAim : NetworkBehaviour
 
         if (IsOwner)
         {
-            AimLocal();
-            netTurretRot.Value = turretPivot.rotation;
+            HandleInput();
+            syncedYaw.Value = yaw;
+            syncedPitch.Value = pitch;
         }
         else
         {
-            // smooth on remotes
-            turretPivot.rotation = Quaternion.Lerp(
-                turretPivot.rotation,
-                netTurretRot.Value,
-                Time.deltaTime * rotationSpeed
-            );
+            // smooth sync for other clients
+            turretPivot.localRotation = Quaternion.Lerp(
+                turretPivot.localRotation,
+                Quaternion.Euler(0, syncedYaw.Value, 0),
+                Time.deltaTime * rotationSmoothness);
+
+            barrelPivot.localRotation = Quaternion.Lerp(
+                barrelPivot.localRotation,
+                Quaternion.Euler(syncedPitch.Value, 0, 0),
+                Time.deltaTime * rotationSmoothness);
         }
     }
 
-    void AimLocal()
+    void HandleInput()
     {
-        if (!cam) cam = Camera.main;
+        // get mouse movement
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
 
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        // update rotation values
+        yaw += mouseX * horizontalSpeed;
+        pitch -= mouseY * verticalSpeed;
+        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
 
-        // try to hit ground; if not, keep the last good point -> no snap
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, groundMask))
-        {
-            lastAimPoint = hit.point;
-            hasAimPoint = true;
-        }
+        // apply smooth rotations locally
+        turretPivot.localRotation = Quaternion.Lerp(
+            turretPivot.localRotation,
+            Quaternion.Euler(0, yaw, 0),
+            Time.deltaTime * rotationSmoothness);
 
-        if (!hasAimPoint) return; // nothing valid yet, chill
-
-        // build a flat direction (we don't pitch the turret here)
-        Vector3 dir = lastAimPoint - tankBody.position;
-        dir.y = 0f;
-        if (dir.sqrMagnitude < 0.0005f) return;
-
-        Quaternion target = Quaternion.LookRotation(dir, Vector3.up);
-
-        // smooth rotate so it feels weighty
-        turretPivot.rotation = Quaternion.Lerp(
-            turretPivot.rotation,
-            target,
-            Time.deltaTime * rotationSpeed
-        );
+        barrelPivot.localRotation = Quaternion.Lerp(
+            barrelPivot.localRotation,
+            Quaternion.Euler(pitch, 0, 0),
+            Time.deltaTime * rotationSmoothness);
     }
 }
+
+
+
+
