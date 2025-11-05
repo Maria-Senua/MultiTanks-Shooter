@@ -50,6 +50,7 @@ public class TakeDamage : MonoBehaviour
         if (health <= 0)
         {
             //add Game over or sth
+            
         }
     }
 }
