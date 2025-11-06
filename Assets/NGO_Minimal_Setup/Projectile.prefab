@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6330215407083812168}
   - component: {fileID: 8750461504210772}
   - component: {fileID: 4620315593593432348}
+  - component: {fileID: -7835912538035464563}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Bullet
@@ -178,3 +179,18 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   lifeTime: 10
   explosion: {fileID: 4910834160126633424, guid: 8e87b81d959ae4f5690d5068f05715f4, type: 3}
+  damage: 10
+--- !u!114 &-7835912538035464563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4364547746800806667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081b219ba9f6b2f4b9d1d737e37eb73e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 20
+  force: 50
