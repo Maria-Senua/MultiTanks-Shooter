@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class TankMovement : NetworkBehaviour
 {
-    [SerializeField] float moveSpeed = 7f;   // how fast we scoot
+    [SerializeField] public float moveSpeed = 7f;   // how fast we scoot
     [SerializeField] float rotateSpeed = 70f;// how fast we turn
 
     Rigidbody rb;
