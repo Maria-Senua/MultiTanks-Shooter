@@ -3,7 +3,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public class TakeDamage : MonoBehaviour
+public class TakeDamage : NetworkBehaviour
 {
     [SerializeField] private TMPro.TextMeshProUGUI healthText;
     [SerializeField] private TMPro.TextMeshProUGUI damageText;
@@ -12,7 +12,7 @@ public class TakeDamage : MonoBehaviour
     //public float health = 100;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void OnNetworkSpawn()
     {
         healthText.SetText(health.Value.ToString());
         HideDamageText();
