@@ -20,6 +20,8 @@ public class PlayerShooting : NetworkBehaviour
 
     private Collider[] ownerCols;
 
+    public NetworkVariable<float> bulletScale = new NetworkVariable<float>(1);
+
     public override void OnNetworkSpawn()
     {
         ownerCols = GetComponentsInChildren<Collider>(false);
@@ -86,6 +88,7 @@ public class PlayerShooting : NetworkBehaviour
         // small spawn offset so the projectile doesn't clip the barrel
         var spawnPos = pointPos + (pointRot * Vector3.forward) * 0.20f;
         var go = Instantiate(projectilePrefab, spawnPos, pointRot);
+        go.transform.localScale *= bulletScale.Value;
 
         var no = go.GetComponent<NetworkObject>();
         if (!no) { Debug.LogError("[PlayerShooting] projectilePrefab needs NetworkObject"); Destroy(go); return; }
