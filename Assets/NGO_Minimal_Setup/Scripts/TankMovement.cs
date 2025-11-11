@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class TankMovement : NetworkBehaviour
 {
+    public NetworkVariable<float> speed = new NetworkVariable<float>(7f);
     [SerializeField] public float moveSpeed = 7f;   // how fast we scoot
     [SerializeField] float rotateSpeed = 70f;// how fast we turn
 
@@ -26,7 +27,8 @@ public class TankMovement : NetworkBehaviour
         float turn = Input.GetAxis("Horizontal"); // A/D
 
         // forward/backward motion (world-friendly)
-        Vector3 step = transform.forward * move * moveSpeed * Time.fixedDeltaTime;
+        //Vector3 step = transform.forward * move * moveSpeed * Time.fixedDeltaTime;
+        Vector3 step = transform.forward * move * speed.Value * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + step);
 
         // yaw rotation only

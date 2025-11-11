@@ -23,9 +23,11 @@ public class PlayerPowerUpHandler : NetworkBehaviour
 
     private IEnumerator SpeedBoostRoutine(float duration, float multiplier)
     {
-        movement.moveSpeed *= multiplier;
+        //movement.moveSpeed *= multiplier;
+        movement.speed.Value *= multiplier;
         yield return new WaitForSeconds(duration);
-        movement.moveSpeed /= multiplier;
+        movement.speed.Value /= multiplier;
+        //movement.moveSpeed /= multiplier;
     }
 
     public void ApplyHeal(int amount)
