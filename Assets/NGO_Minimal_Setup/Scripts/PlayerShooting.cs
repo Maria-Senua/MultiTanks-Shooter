@@ -13,6 +13,8 @@ public class PlayerShooting : NetworkBehaviour
     float currentCharge = 0f;
     bool isCharging = false;
 
+    public NetworkVariable<float> bulletScale = new NetworkVariable<float>(1f);
+
     void Update()
     {
         if (!IsOwner) return;
@@ -40,6 +42,7 @@ public class PlayerShooting : NetworkBehaviour
     void ShootServerRpc(float power)
     {
         var projectileObj = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+        projectileObj.transform.localScale *= bulletScale.Value;
         projectileObj.GetComponent<NetworkObject>().Spawn(true);
         projectileObj.GetComponent<Rigidbody>().linearVelocity = shootPoint.forward * power;
 

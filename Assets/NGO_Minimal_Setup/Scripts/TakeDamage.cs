@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using UnityEngine;
 
@@ -51,6 +52,15 @@ public class TakeDamage : MonoBehaviour
         {
             //add Game over or sth
             
-        }
+        }     
+    }
+
+    public void AddHealth(int amount)
+    {
+        if (health < 100)
+        {
+            health += amount;
+            healthText.SetText(health.ToString());
+        }  
     }
 }

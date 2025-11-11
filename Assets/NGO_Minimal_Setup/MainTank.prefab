@@ -236,6 +236,7 @@ GameObject:
   - component: {fileID: 2432662025738054964}
   - component: {fileID: 8318152696738275881}
   - component: {fileID: 6537945216185400161}
+  - component: {fileID: 5530370821014740220}
   m_Layer: 0
   m_Name: MainTank
   m_TagString: Untagged
@@ -414,6 +415,8 @@ MonoBehaviour:
   shootAudio: {fileID: 5195157191944204239}
   maxCharge: 20
   chargeSpeed: 10
+  bulletScale:
+    m_InternalValue: 1
 --- !u!114 &2432662025738054964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,6 +467,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.72903234, z: 1}
   m_Center: {x: 0, y: 0.13548383, z: 0}
+--- !u!114 &5530370821014740220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3729350640037515439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d43d83d07c2a64fb5e88d005714478, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &3964881047190268685
 GameObject:
   m_ObjectHideFlags: 0
