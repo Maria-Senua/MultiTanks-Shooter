@@ -22,19 +22,14 @@ public class TakeDamage : NetworkBehaviour
     {
         if (other.gameObject.CompareTag("Bullet"))
         {
-            ChangeHealthClientRpc(other.gameObject);
+            float damageTaken = other.gameObject.GetComponent<Projectile>().damage;
+            health.Value -= damageTaken;
+            damageText.SetText("-" + damageTaken.ToString());
+            ChangeHealthClientRpc();
         }
     }
 
-    [ClientRpc]
-    void ChangeHealthClientRpc(GameObject bullet)
-    {
-        float damageTaken = bullet.gameObject.GetComponent<Projectile>().damage;
-        health.Value -= damageTaken;
-        damageText.SetText("-" + damageTaken.ToString());
-        healthText.SetText(health.Value.ToString());
-        Invoke(nameof(HideDamageText), 2f);
-    }
+
 
     void HideDamageText()
     {
@@ -72,5 +67,13 @@ public class TakeDamage : NetworkBehaviour
         }  
     }
 
- 
+    [ClientRpc]
+    void ChangeHealthClientRpc()
+    {
+      
+        healthText.SetText(health.Value.ToString());
+        Invoke(nameof(HideDamageText), 2f);
+    }
+
+
 }
