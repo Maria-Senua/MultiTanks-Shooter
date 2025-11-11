@@ -99839,8 +99839,8 @@ GameObject:
   - component: {fileID: 1708139088}
   - component: {fileID: 1708139087}
   - component: {fileID: 1708139086}
-  - component: {fileID: 1708139089}
   - component: {fileID: 1708139092}
+  - component: {fileID: 1708139089}
   - component: {fileID: 1708139090}
   - component: {fileID: 1708139091}
   m_Layer: 0
@@ -99937,6 +99937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6852e010668b3414aa73b873272f2347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   dust: {fileID: 1282991313582019310, guid: c6ff1638aee77453599bca65455113ae, type: 3}
 --- !u!114 &1708139090
 MonoBehaviour:
@@ -109847,6 +109848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6852e010668b3414aa73b873272f2347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   dust: {fileID: 1282991313582019310, guid: c6ff1638aee77453599bca65455113ae, type: 3}
 --- !u!1 &1906613098 stripped
 GameObject:
