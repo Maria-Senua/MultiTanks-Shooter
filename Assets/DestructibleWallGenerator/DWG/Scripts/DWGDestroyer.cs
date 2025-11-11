@@ -1,14 +1,23 @@
 ﻿using UnityEngine;
+using Unity.Netcode;
 using System.Collections;
 
-public class DWGDestroyer : MonoBehaviour {
+public class DWGDestroyer : NetworkBehaviour {
 
 	public float radius = 2;
 	public float force = 50f;
 	
 	void OnCollisionEnter(Collision col){
-			ExplodeForce();
-			Destroy(GetComponent<DWGDestroyer>());
+		if (!IsServer) return;
+		ExplodeForceServerRpc();
+	}
+	
+	[ServerRpc(RequireOwnership = false)]
+	private void ExplodeForceServerRpc(ServerRpcParams rpcParams = default)
+	{
+		ExplodeForce();
+
+		Destroy(this);
 	}
 	
 	// Explode force by radius only if a destructible tag is found
