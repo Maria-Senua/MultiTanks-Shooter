@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8750461504210772}
   - component: {fileID: 4620315593593432348}
   - component: {fileID: 1612921665953517196}
+  - component: {fileID: 8697584117567837028}
   m_Layer: 6
   m_Name: Projectile
   m_TagString: Bullet
@@ -226,3 +227,17 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &8697584117567837028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4364547746800806667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081b219ba9f6b2f4b9d1d737e37eb73e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 5
+  force: 50
