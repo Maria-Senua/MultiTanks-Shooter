@@ -25,6 +25,8 @@ public class TakeDamage : NetworkBehaviour
             float damageTaken = other.gameObject.GetComponent<Projectile>().damage;
             health.Value -= damageTaken;
             damageText.SetText("-" + damageTaken.ToString());
+            healthText.SetText(health.Value.ToString());
+            Invoke(nameof(HideDamageText), 2f);
         }
     }
 
@@ -66,10 +68,5 @@ public class TakeDamage : NetworkBehaviour
         }  
     }
 
-    [ServerRpc]
-    public void UpdateHealthServerRpc()
-    {
-        healthText.SetText(health.Value.ToString());
-        Invoke(nameof(HideDamageText), 2f);
-    }
+ 
 }
