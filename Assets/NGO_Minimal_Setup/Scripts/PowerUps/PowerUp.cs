@@ -9,6 +9,7 @@ public class PowerUp : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("in trigger");
+        gameObject.GetComponent<MeshRenderer>().material.color = Color.white;
         if (!IsServer) return;
         PlayerPowerUpHandler player = other.GetComponent<PlayerPowerUpHandler>();
         if (player != null)
