@@ -28,13 +28,7 @@ public class TakeDamage : NetworkBehaviour
         }
     }
 
-    [ServerRpc] 
-    public void UpdateHealth()
-    {
-
-        healthText.SetText(health.Value.ToString());
-        Invoke(nameof(HideDamageText), 2f);
-    }
+  
 
     void HideDamageText()
     {
@@ -70,5 +64,12 @@ public class TakeDamage : NetworkBehaviour
             health.Value += amount;
             healthText.SetText(health.Value.ToString());
         }  
+    }
+
+    [ServerRpc]
+    public void UpdateHealthServerRpc()
+    {
+        healthText.SetText(health.Value.ToString());
+        Invoke(nameof(HideDamageText), 2f);
     }
 }
