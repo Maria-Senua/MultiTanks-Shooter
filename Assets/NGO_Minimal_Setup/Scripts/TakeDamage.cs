@@ -25,7 +25,7 @@ public class TakeDamage : NetworkBehaviour
             float damageTaken = other.gameObject.GetComponent<Projectile>().damage;
             health.Value -= damageTaken;
             damageText.SetText("-" + damageTaken.ToString());
-            ChangeHealthClientRpc();
+           // ChangeHealthClientRpc();
         }
     }
 
@@ -39,6 +39,7 @@ public class TakeDamage : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        ChangeHealth();
         if (health.Value >= 70)
         {
             healthText.color = new Color32(86, 188, 58, 255);
@@ -67,12 +68,13 @@ public class TakeDamage : NetworkBehaviour
         }  
     }
 
-    [ClientRpc]
-    void ChangeHealthClientRpc()
+    //[ClientRpc]
+    void ChangeHealth()
     {
       
         healthText.SetText(health.Value.ToString());
         Invoke(nameof(HideDamageText), 2f);
+    
     }
 
 
