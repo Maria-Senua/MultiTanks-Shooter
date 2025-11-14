@@ -85,7 +85,7 @@ public class SessionManager : Singleton<SessionManager>
         return results.Sessions;
     }
 
-    async UniTaskVoid LeaveSession() 
+    public async UniTask LeaveSession() 
     {
         if (ActiveSession != null) {
             try {
