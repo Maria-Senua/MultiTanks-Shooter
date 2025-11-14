@@ -32,7 +32,27 @@ public class TakeDamage : NetworkBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Gameover") )
+        {
+            if (IsOwner && !isDead)
+            {
+                isDead = true;
+                Debug.Log("Player died");
 
+                gameOverText.gameObject.SetActive(true);
+
+                if (IsHost)
+                {
+                    Debug.Log("Host died → disabling host gameplay but keeping server alive");
+                    DisableHostGameplayClientRpc();
+                    return; 
+                }
+                LeaveSessionAfterDeath().Forget();
+            }
+        }
+    }
 
     void HideDamageText()
     {
@@ -59,13 +79,22 @@ public class TakeDamage : NetworkBehaviour
         }
         if (IsOwner && health.Value <= 0 && !isDead)
         {
-            //add Game over or sth
             isDead = true;
-            Debug.Log("LeaveSessionAfterDeath get ready");
+            Debug.Log("Player died");
+
             gameOverText.gameObject.SetActive(true);
+
+            if (IsHost)
+            {
+                Debug.Log("Host died → disabling host gameplay but keeping server alive");
+                DisableHostGameplayClientRpc();
+                return; 
+            }
             LeaveSessionAfterDeath().Forget();
-        }     
+        }
+   
     }
+    
 
     private async UniTaskVoid LeaveSessionAfterDeath()
     {
@@ -99,6 +128,27 @@ public class TakeDamage : NetworkBehaviour
         {
             Debug.LogError($"Error while leaving session: {e}");
         }
+    }
+    
+    [ClientRpc]
+    private void DisableHostGameplayClientRpc()
+    {
+        // Disable gameplay scripts
+        var movement = GetComponent<TankMovement>();
+        if (movement) movement.enabled = false;
+
+        var shooting = GetComponent<PlayerShooting>();
+        if (shooting) shooting.enabled = false;
+
+        // Disable collisions
+        var cc = GetComponent<CharacterController>();
+        if (cc) cc.enabled = false;
+
+        // Optional: hide host character model
+        foreach (var r in GetComponentsInChildren<Renderer>())
+            r.enabled = false;
+
+        Debug.Log("Host died but server stays alive");
     }
 
 
