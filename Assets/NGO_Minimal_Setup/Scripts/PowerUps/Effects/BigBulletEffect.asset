@@ -16,4 +16,4 @@ MonoBehaviour:
   powerUpModel: {fileID: 0}
   icon: {fileID: 0}
   duration: 10
-  bulletScale: 1.5
+  bulletScale: 3

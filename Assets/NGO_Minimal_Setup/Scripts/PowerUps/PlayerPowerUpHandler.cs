@@ -46,8 +46,10 @@ public class PlayerPowerUpHandler : NetworkBehaviour
     private IEnumerator BigBulletRoutine(float duration, float scale)
     {
         shooting.bulletScale.Value = scale;
+        shooting.damageMultiplier.Value = 3;
         yield return new WaitForSeconds(duration);
         shooting.bulletScale.Value = 1f;
+        shooting.damageMultiplier.Value = 1f;
     }
 
 }
