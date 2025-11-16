@@ -133,18 +133,22 @@ public class TakeDamage : NetworkBehaviour
     [ClientRpc]
     private void DisableHostGameplayClientRpc()
     {
-        // Disable gameplay scripts
         var movement = GetComponent<TankMovement>();
         if (movement) movement.enabled = false;
 
         var shooting = GetComponent<PlayerShooting>();
         if (shooting) shooting.enabled = false;
 
-        // Disable collisions
         var cc = GetComponent<CharacterController>();
         if (cc) cc.enabled = false;
 
-        // Optional: hide host character model
+        var collider = GetComponent<Collider>();
+        if (collider) collider.enabled = false;
+        foreach (var childCollider in GetComponentsInChildren<Collider>())
+            childCollider.enabled = false;
+        damageText.gameObject.SetActive(false);
+        healthText.gameObject.SetActive(false);
+
         foreach (var r in GetComponentsInChildren<Renderer>())
             r.enabled = false;
 
