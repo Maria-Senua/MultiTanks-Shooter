@@ -3,20 +3,22 @@ using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 
 public class PowerUpSpawner : NetworkBehaviour
 {
     public GameObject[] powerUpPrefabs;
 
-    public Transform[] spawnPoints;
+    public Spawnpoint[] spawnPoints;
 
     public float spawnInterval;
 
-    private readonly Dictionary<Transform, GameObject> activePowerUps = new Dictionary<Transform, GameObject>();
+   private readonly Dictionary<Transform, GameObject> activePowerUps = new Dictionary<Transform, GameObject>();
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        if (!IsServer) // no not for multiplayer
+        if (IsServer) // no not for multiplayer
         {
             Debug.Log("HEEEERE");
             StartCoroutine(SpawnRoutine());
@@ -28,35 +30,61 @@ public class PowerUpSpawner : NetworkBehaviour
         while (true)
         {
             yield return new WaitForSeconds(spawnInterval);
-            SpawnRandom();
+           
+            SpawnPowerUp();
         }
     }
 
-    private void SpawnRandom()
+
+
+    private void SpawnPowerUp()
     {
-        int prefabIndex = UnityEngine.Random.Range(0, powerUpPrefabs.Length);
-        GameObject prefabToSpawn = powerUpPrefabs[prefabIndex];
+        //SpawnRandom();
+        List<Spawnpoint> freeSpawnpoints = spawnPoints.Where(p => p.IsFree.Value).ToList();
 
-        List<Transform> tempSpawnPoints = new List<Transform>();
-        foreach (Transform t in spawnPoints)
-        {
-            if(!activePowerUps.ContainsKey(t) || activePowerUps[t] == null)
-            {
-                tempSpawnPoints.Add(t);
-            }
-        }
-        if (tempSpawnPoints.Count == 0) return;
+        if (freeSpawnpoints.Count == 0)
+            return;
 
-        int spawnIndex = UnityEngine.Random.Range(0, tempSpawnPoints.Count);
-        //int spawnIndex = UnityEngine.Random.Range(0, spawnPoints.Length); 
-        //Transform spawnPoint = spawnPoints[spawnIndex];
-        Transform spawnPoint = tempSpawnPoints[spawnIndex];
-        GameObject powerUp = Instantiate(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
-        powerUp.GetComponent<NetworkObject>().Spawn(true);
+        Spawnpoint point = freeSpawnpoints[UnityEngine.Random.Range(0, freeSpawnpoints.Count)];
+        GameObject prefabToSpawn = powerUpPrefabs[UnityEngine.Random.Range(0, powerUpPrefabs.Length)];
 
-        
-        activePowerUps[spawnPoint] = powerUp;
-        tempSpawnPoints.Clear();    
-        Debug.Log(transform.name);
+        GameObject powerUp = Instantiate(prefabToSpawn, point.transform.position, Quaternion.identity);
+        powerUp.GetComponent<NetworkObject>().Spawn();
+
+        //spawnPoints.Where(p => p.transform.position == point.transform.position).First().IsFree.Value = false;
+        point.IsFree.Value = false;
+
+        powerUp.GetComponent<PowerUp>().Init(point);
+
+
+        // powerUp.GetComponent<>
     }
+
+    //private void SpawnRandom()
+    //{
+    //    int prefabIndex = UnityEngine.Random.Range(0, powerUpPrefabs.Length);
+    //    GameObject prefabToSpawn = powerUpPrefabs[prefabIndex];
+
+    //    List<Transform> tempSpawnPoints = new List<Transform>();
+    //    foreach (Transform t in spawnPoints)
+    //    {
+    //        if(!activePowerUps.ContainsKey(t) || activePowerUps[t] == null)
+    //        {
+    //            tempSpawnPoints.Add(t);
+    //        }
+    //    }
+    //    if (tempSpawnPoints.Count == 0) return;
+
+    //    int spawnIndex = UnityEngine.Random.Range(0, tempSpawnPoints.Count);
+    //    //int spawnIndex = UnityEngine.Random.Range(0, spawnPoints.Length); 
+    //    //Transform spawnPoint = spawnPoints[spawnIndex];
+    //    Transform spawnPoint = tempSpawnPoints[spawnIndex];
+    //    GameObject powerUp = Instantiate(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
+    //    powerUp.GetComponent<NetworkObject>().Spawn(true);
+
+
+    //    activePowerUps[spawnPoint] = powerUp;
+    //    tempSpawnPoints.Clear();    
+    //    Debug.Log(transform.name);
+    //}
 }
