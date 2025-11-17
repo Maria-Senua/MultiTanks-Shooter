@@ -449,9 +449,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   healthText: {fileID: 2534087894141024986}
   damageText: {fileID: 391015133831123838}
-
   gameOverText: {fileID: 5715794039618509156}
-
   health:
     m_InternalValue: 100
 --- !u!65 &6537945216185400161
