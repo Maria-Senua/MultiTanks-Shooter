@@ -21,6 +21,7 @@ public class PlayerShooting : NetworkBehaviour
     private Collider[] ownerCols;
 
     public NetworkVariable<float> bulletScale = new NetworkVariable<float>(1);
+    public NetworkVariable<float> damageMultiplier = new NetworkVariable<float>(1);
 
     public override void OnNetworkSpawn()
     {
@@ -89,6 +90,7 @@ public class PlayerShooting : NetworkBehaviour
         var spawnPos = pointPos + (pointRot * Vector3.forward) * 0.20f;
         var go = Instantiate(projectilePrefab, spawnPos, pointRot);
         go.transform.localScale *= bulletScale.Value;
+        go.GetComponent<Projectile>().damage *= damageMultiplier.Value;
 
         var no = go.GetComponent<NetworkObject>();
         if (!no) { Debug.LogError("[PlayerShooting] projectilePrefab needs NetworkObject"); Destroy(go); return; }
