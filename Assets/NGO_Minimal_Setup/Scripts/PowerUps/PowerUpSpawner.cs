@@ -14,13 +14,12 @@ public class PowerUpSpawner : NetworkBehaviour
 
     public float spawnInterval;
 
-   private readonly Dictionary<Transform, GameObject> activePowerUps = new Dictionary<Transform, GameObject>();
+    //private readonly Dictionary<Transform, GameObject> activePowerUps = new Dictionary<Transform, GameObject>();
 
     public override void OnNetworkSpawn()
     {
         if (IsServer) // no not for multiplayer
         {
-            Debug.Log("HEEEERE");
             StartCoroutine(SpawnRoutine());
         }
     }
@@ -34,8 +33,6 @@ public class PowerUpSpawner : NetworkBehaviour
             SpawnPowerUp();
         }
     }
-
-
 
     private void SpawnPowerUp()
     {
@@ -55,9 +52,6 @@ public class PowerUpSpawner : NetworkBehaviour
         point.IsFree.Value = false;
 
         powerUp.GetComponent<PowerUp>().Init(point);
-
-
-        // powerUp.GetComponent<>
     }
 
     //private void SpawnRandom()
