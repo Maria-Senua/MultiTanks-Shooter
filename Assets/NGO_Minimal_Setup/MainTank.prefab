@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 637a03ad7bc063646aca231ca79af747, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -173,7 +173,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 8cf8d09cebc79bf4ab2c6364102fe99f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -375,6 +375,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  speed:
+    m_InternalValue: 7
   moveSpeed: 5
   rotateSpeed: 70
 --- !u!114 &3518600880892069188
@@ -444,9 +446,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c1b601fc2dae41e48163ef50076f6c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   healthText: {fileID: 2534087894141024986}
   damageText: {fileID: 391015133831123838}
-  health: 100
+  health:
+    m_InternalValue: 100
 --- !u!65 &6537945216185400161
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -547,7 +551,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: bf30022de3c775a498e82fc198cfa5f2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
