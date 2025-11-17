@@ -50,7 +50,7 @@ public class SessionManager : Singleton<SessionManager>
         var playerProperties = await GetPlayerProperties(); 
         
         var options = new SessionOptions {
-            MaxPlayers = 2,
+            MaxPlayers = 4,
             IsLocked = false,
             IsPrivate = false,
             PlayerProperties = playerProperties 
