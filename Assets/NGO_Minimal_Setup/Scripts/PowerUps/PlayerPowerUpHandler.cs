@@ -52,4 +52,13 @@ public class PlayerPowerUpHandler : NetworkBehaviour
         shooting.damageMultiplier.Value = 1f;
     }
 
+    private IEnumerator FastChargeRoutine(float duration, float scale)
+    {
+        shooting.bulletScale.Value = scale;
+        shooting.damageMultiplier.Value = 3;
+        yield return new WaitForSeconds(duration);
+        shooting.bulletScale.Value = 1f;
+        shooting.damageMultiplier.Value = 1f;
+    }
+
 }

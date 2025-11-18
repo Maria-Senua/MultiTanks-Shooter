@@ -36,7 +36,6 @@ public class PowerUpSpawner : NetworkBehaviour
 
     private void SpawnPowerUp()
     {
-        //SpawnRandom();
         List<Spawnpoint> freeSpawnpoints = spawnPoints.Where(p => p.IsFree.Value).ToList();
 
         if (freeSpawnpoints.Count == 0)
