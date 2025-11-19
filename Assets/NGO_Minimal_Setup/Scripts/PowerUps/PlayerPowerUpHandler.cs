@@ -37,6 +37,11 @@ public class PlayerPowerUpHandler : NetworkBehaviour
         
     }
 
+    public void AddAmmo(int amount)
+    {
+        shooting.ammo += amount;
+    }
+
     public void ApplyBigBullet(float duration, float scale)
     {
         if (!IsServer) return;
