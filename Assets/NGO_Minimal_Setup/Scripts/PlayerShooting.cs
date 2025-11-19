@@ -10,6 +10,9 @@ public class PlayerShooting : NetworkBehaviour
     [SerializeField] private Transform shootPoint;        // barrel tip (aims forward)
     [SerializeField] private ParticleSystem muzzleFlash;  // small muzzle particle system on the tank
     [SerializeField] private AudioSource shootAudio;      // one-shot fire sound
+    
+    [Header("Ammo")]
+    public int ammo = 10;
 
     [Header("Charge")]
     [SerializeField] private float maxCharge   = 20f;     // max launch speed
@@ -30,8 +33,11 @@ public class PlayerShooting : NetworkBehaviour
 
     void Update()
     {
+        
         if (!IsOwner) return;
-
+        
+        Debug.Log("Ammo is " + ammo);
+        if (ammo <= 0) return;
         // hold to charge
         if (Input.GetKey(KeyCode.Space))
         {
@@ -49,7 +55,8 @@ public class PlayerShooting : NetworkBehaviour
 
             // ask server to spawn the projectile
             ShootServerRpc(currentCharge, shootPoint.position, shootPoint.rotation);
-
+            ammo--;
+            
             // reset charge / UI
             currentCharge = 0f;
             isCharging = false;

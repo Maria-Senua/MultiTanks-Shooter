@@ -416,9 +416,13 @@ MonoBehaviour:
   shootPoint: {fileID: 1173330554003006430}
   muzzleFlash: {fileID: 1676429663461757496}
   shootAudio: {fileID: 5195157191944204239}
+  ammo: 10
+  ammoLabel: {fileID: 1377356102328994944, guid: fa7e9b70220e64a6da6bc2781aa9c8bd, type: 3}
   maxCharge: 20
   chargeSpeed: 10
   bulletScale:
+    m_InternalValue: 1
+  damageMultiplier:
     m_InternalValue: 1
 --- !u!114 &2432662025738054964
 MonoBehaviour:
