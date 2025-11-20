@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 4985590408841741592}
   m_Layer: 7
   m_Name: MainTank
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -417,7 +417,6 @@ MonoBehaviour:
   muzzleFlash: {fileID: 1676429663461757496}
   shootAudio: {fileID: 5195157191944204239}
   ammo: 10
-  ammoLabel: {fileID: 1377356102328994944, guid: fa7e9b70220e64a6da6bc2781aa9c8bd, type: 3}
   maxCharge: 20
   chargeSpeed: 10
   bulletScale:
