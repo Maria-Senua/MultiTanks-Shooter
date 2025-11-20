@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class FlameDamage : MonoBehaviour
 {
     private ParticleSystem ps;
+    public float damage = 2f;
 
     private void Awake()
     {
@@ -50,7 +51,7 @@ public class FlameDamage : MonoBehaviour
                 var dmg = hit.GetComponent<TakeDamage>();
                 if (dmg != null)
                 {
-                    dmg.health.Value -= 1f;
+                    dmg.health.Value -= damage;
                     Debug.Log("Flame hit player! HP = " + dmg.health.Value);
                 }
             }
