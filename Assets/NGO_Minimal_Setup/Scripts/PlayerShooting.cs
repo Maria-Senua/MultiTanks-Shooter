@@ -35,6 +35,12 @@ public class PlayerShooting : NetworkBehaviour
     [SerializeField] private ParticleSystem flameParticles;   // flame effect
     [SerializeField] private FlameDamage flameDamage; 
     private NetworkObject spawnedFlame;
+    
+    [Header("Flamethrower Ammo")]
+    public int flameAmmo = 100;      
+    [SerializeField] private float flameConsumptionRate = 1f; 
+
+    private float flameAmmoTimer = 0f;
 
     private Collider[] ownerCols;
 
@@ -119,17 +125,40 @@ public class PlayerShooting : NetworkBehaviour
                 flameDamage.enabled = true;
 
             SpawnFlameServerRpc();
+            flameAmmoTimer = 0f; 
+        }
 
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if (flameAmmo > 0)
+            {
+                flameAmmoTimer += Time.deltaTime;
+                if (flameAmmoTimer >= 1f / flameConsumptionRate) 
+                {
+                    int consume = Mathf.FloorToInt(flameAmmoTimer * flameConsumptionRate);
+                    flameAmmo -= consume;
+                    flameAmmoTimer -= consume / flameConsumptionRate;
+
+                    if (flameAmmo <= 0)
+                    {
+                        flameAmmo = 0;
+                        if (IsOwner) flameParticles?.Stop();
+                        if (IsServer) flameDamage.enabled = false;
+                        StopFlamethrowerServerRpc();
+                    }
+                }
+            }
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            flameParticles?.Stop();
-            flameDamage.enabled = false;
+            if (IsOwner) flameParticles?.Stop();
+            if (IsServer) flameDamage.enabled = false;
 
             StopFlamethrowerServerRpc();
         }
     }
+
 
     private void PlayMuzzleLocal()
     {

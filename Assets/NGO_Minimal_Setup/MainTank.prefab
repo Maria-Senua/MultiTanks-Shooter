@@ -422,6 +422,8 @@ MonoBehaviour:
   chargeSpeed: 10
   flameParticles: {fileID: 101168311671623957, guid: 3db2dcacba0f04645b8079235225c2cf, type: 3}
   flameDamage: {fileID: 5755670415706780090, guid: 3db2dcacba0f04645b8079235225c2cf, type: 3}
+  flameAmmo: 10
+  flameConsumptionRate: 1
   bulletScale:
     m_InternalValue: 1
   damageMultiplier:

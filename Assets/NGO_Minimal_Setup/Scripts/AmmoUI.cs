@@ -33,6 +33,11 @@ public class AmmoUI : MonoBehaviour
                 return;
             }
         }
-        ammoText.text = "Ammo: " + playerShoot.ammo.ToString();
+
+        if (playerShoot.currentWeapon == WeaponType.Projectile)
+            ammoText.text = "Ammo: " + playerShoot.ammo.ToString();
+        else
+            ammoText.text = "Flame: " + playerShoot.flameAmmo.ToString();
     }
+
 }
