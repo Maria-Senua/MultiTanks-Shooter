@@ -412,6 +412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  currentWeapon: 0
   projectilePrefab: {fileID: 4364547746800806667, guid: 573091d491cdb614bb14e4ed60ab59e7, type: 3}
   shootPoint: {fileID: 1173330554003006430}
   muzzleFlash: {fileID: 1676429663461757496}
@@ -419,6 +420,8 @@ MonoBehaviour:
   ammo: 10
   maxCharge: 20
   chargeSpeed: 10
+  flameParticles: {fileID: 101168311671623957, guid: 3db2dcacba0f04645b8079235225c2cf, type: 3}
+  flameDamage: {fileID: 5755670415706780090, guid: 3db2dcacba0f04645b8079235225c2cf, type: 3}
   bulletScale:
     m_InternalValue: 1
   damageMultiplier:

@@ -26,6 +26,7 @@ public class TrajectoryPreview : NetworkBehaviour
     {
         if (!shooting || !shooting.IsOwner) { Hide(); return; }
         if (!shooting.ShootPoint) { Hide(); return; }
+        if (shooting.currentWeapon == WeaponType.Flamethrower) {Hide();return;}
 
         if (Input.GetKey(KeyCode.Space))
         {

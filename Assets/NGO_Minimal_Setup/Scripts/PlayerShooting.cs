@@ -3,8 +3,18 @@ using Unity.Netcode;
 
 // shoots along shootPoint.forward with charge-based power.
 // local muzzle particles + local shoot audio. server spawns the projectile.
+
+public enum WeaponType
+{
+    Projectile,
+    Flamethrower
+}
+
 public class PlayerShooting : NetworkBehaviour
 {
+    [Header("Weapon Switching")]
+    public WeaponType currentWeapon = WeaponType.Projectile;
+    
     [Header("Refs")]
     [SerializeField] private GameObject projectilePrefab; // networked projectile
     [SerializeField] private Transform shootPoint;        // barrel tip (aims forward)
@@ -20,6 +30,11 @@ public class PlayerShooting : NetworkBehaviour
 
     private float currentCharge = 0f;
     private bool  isCharging    = false;
+    
+    [Header("Flamethrower Weapon")]
+    [SerializeField] private ParticleSystem flameParticles;   // flame effect
+    [SerializeField] private FlameDamage flameDamage; 
+    private NetworkObject spawnedFlame;
 
     private Collider[] ownerCols;
 
@@ -29,6 +44,11 @@ public class PlayerShooting : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         ownerCols = GetComponentsInChildren<Collider>(false);
+        if (flameParticles != null)
+            flameParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        if (flameDamage != null)
+            flameDamage.enabled = false;
     }
 
     void Update()
@@ -36,40 +56,79 @@ public class PlayerShooting : NetworkBehaviour
         
         if (!IsOwner) return;
         
-        Debug.Log("Ammo is " + ammo);
+        SwitchWeapon();
+        SwitchShootMode();
+        
+        if (IsServer && spawnedFlame != null)
+        {
+            spawnedFlame.transform.position = shootPoint.position + shootPoint.forward * 1.5f;
+            spawnedFlame.transform.rotation = shootPoint.rotation;
+        }
+    }
+    private void SwitchWeapon()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (currentWeapon == WeaponType.Projectile)
+                currentWeapon = WeaponType.Flamethrower;
+            else
+                currentWeapon = WeaponType.Projectile;
+        }
+    }
+
+    private void SwitchShootMode()
+    {
+        if (currentWeapon == WeaponType.Projectile)
+        {
+            ShootBullet();
+        }
+        else
+        {
+            ShootFlame();
+        }
+    }
+    private void ShootBullet()
+    {
         if (ammo <= 0) return;
-        // hold to charge
+
         if (Input.GetKey(KeyCode.Space))
         {
             isCharging = true;
             currentCharge += chargeSpeed * Time.deltaTime;
-            currentCharge  = Mathf.Clamp(currentCharge, 0f, maxCharge);
-            PowerBarUI.Instance?.SetCharge(currentCharge / maxCharge);
+            currentCharge = Mathf.Clamp(currentCharge, 0f, maxCharge);
         }
 
-        // release to shoot
         if (Input.GetKeyUp(KeyCode.Space))
         {
             PlayMuzzleLocal();
             PlayShootSoundLocal();
 
-            // ask server to spawn the projectile
             ShootServerRpc(currentCharge, shootPoint.position, shootPoint.rotation);
             ammo--;
-            
-            // reset charge / UI
+
             currentCharge = 0f;
             isCharging = false;
-            PowerBarUI.Instance?.SetCharge(0f);
+        }
+    }
+    private void ShootFlame()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (IsOwner) flameParticles?.Play(); 
+            if (IsServer)
+                flameDamage.enabled = true;
 
-            // tiny local recoil
-            if (shootPoint && shootPoint.parent != null)
-                shootPoint.parent.localPosition -= shootPoint.forward * 0.1f;
+            SpawnFlameServerRpc();
+
         }
 
-        // bring barrel back smoothly (local cosmetic)
-        if (shootPoint && shootPoint.parent != null)
-            shootPoint.parent.localPosition = Vector3.Lerp(shootPoint.parent.localPosition, Vector3.zero, 0.2f);
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            flameParticles?.Stop();
+            flameDamage.enabled = false;
+
+            StopFlamethrowerServerRpc();
+        }
     }
 
     private void PlayMuzzleLocal()
@@ -93,17 +152,14 @@ public class PlayerShooting : NetworkBehaviour
     {
         if (!projectilePrefab) return;
 
-        // small spawn offset so the projectile doesn't clip the barrel
         var spawnPos = pointPos + (pointRot * Vector3.forward) * 0.20f;
         var go = Instantiate(projectilePrefab, spawnPos, pointRot);
         go.transform.localScale *= bulletScale.Value;
         go.GetComponent<Projectile>().damage *= damageMultiplier.Value;
 
         var no = go.GetComponent<NetworkObject>();
-        if (!no) { Debug.LogError("[PlayerShooting] projectilePrefab needs NetworkObject"); Destroy(go); return; }
-        no.Spawn(); // replicated to all clients
+        no.Spawn(); 
 
-        // give it the initial velocity (mass=1 → speed == power)
         var rb = go.GetComponent<Rigidbody>();
         if (rb)
         {
@@ -115,7 +171,6 @@ public class PlayerShooting : NetworkBehaviour
             rb.linearVelocity = Vector3.zero;
             Vector3 v0 = (pointRot * Vector3.forward) * power;
 
-            // some Unity 6 variants expose linearVelocity; set it if available
             var prop = typeof(Rigidbody).GetProperty("linearVelocity");
             if (prop != null && prop.CanWrite) { try { prop.SetValue(rb, v0, null); } catch { } }
 
@@ -136,6 +191,47 @@ public class PlayerShooting : NetworkBehaviour
                 if (oc && pc) Physics.IgnoreCollision(pc, oc, true);
     }
 
+  
+    [ServerRpc]
+    void SpawnFlameServerRpc(ServerRpcParams rpc = default)
+    {
+        if (!flameParticles) return;
+
+        GameObject go = Instantiate(flameParticles.gameObject, shootPoint.position, shootPoint.rotation);
+        NetworkObject no = go.GetComponent<NetworkObject>();
+        no.Spawn(); // networked object. client will spawn automatically
+        FlameDamage flameDamage = go.GetComponent<FlameDamage>();
+       if (flameDamage != null)
+        {
+            flameDamage.owner = gameObject; 
+        }
+
+        FlamethrowerFollow follow = go.GetComponent<FlamethrowerFollow>();
+        if (follow != null)
+        {
+            follow.target = shootPoint;        
+            follow.offset = shootPoint.forward * 1.2f;
+        }
+
+        spawnedFlame = no;
+    }
+    
+
+
+    [ServerRpc]
+    void StopFlamethrowerServerRpc()
+    {
+        if (spawnedFlame != null && spawnedFlame.IsSpawned)
+        {
+            spawnedFlame.Despawn(true);
+            spawnedFlame = null;
+        }
+    }
+
+
+
+
+    
     // getters for the preview
     public float MaxCharge => maxCharge;
     public float ChargeSpeed => chargeSpeed;
