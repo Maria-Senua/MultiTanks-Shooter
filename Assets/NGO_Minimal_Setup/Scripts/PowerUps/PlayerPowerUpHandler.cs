@@ -41,6 +41,10 @@ public class PlayerPowerUpHandler : NetworkBehaviour
     {
         shooting.ammo += amount;
     }
+    public void AddFlame(int amount)
+    {
+        shooting.flameAmmo += amount;
+    }
 
     public void ApplyBigBullet(float duration, float scale)
     {
