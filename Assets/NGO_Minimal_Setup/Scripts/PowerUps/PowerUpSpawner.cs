@@ -6,24 +6,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
+
+/// <summary>
+/// Handles spawning of power-ups
+/// Only the server runs the spawning logic since power-ups are networked objects
+/// </summary>
 public class PowerUpSpawner : NetworkBehaviour
 {
-    public GameObject[] powerUpPrefabs;
+    public GameObject[] powerUpPrefabs; // array of spawnable power-ups
 
-    public Spawnpoint[] spawnPoints;
+    public Spawnpoint[] spawnPoints; // all spawn point
 
-    public float spawnInterval;
-
-    //private readonly Dictionary<Transform, GameObject> activePowerUps = new Dictionary<Transform, GameObject>();
+    public float spawnInterval; // time between spawns in seconds
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer) // no not for multiplayer
+        if (IsServer) 
         {
             StartCoroutine(SpawnRoutine());
         }
     }
 
+    /// <summary>
+    /// Repeatedly spawns power-ups at fixed intervals.
+    /// </summary>
     private IEnumerator SpawnRoutine()
     {
         while (true)
@@ -34,6 +40,11 @@ public class PowerUpSpawner : NetworkBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Chooses a random free spawn point and a random power-up prefab,
+    /// instantiates it, and marks the spawn point as occupied.
+    /// </summary>
     private void SpawnPowerUp()
     {
         List<Spawnpoint> freeSpawnpoints = spawnPoints.Where(p => p.IsFree.Value).ToList();
@@ -47,37 +58,9 @@ public class PowerUpSpawner : NetworkBehaviour
         GameObject powerUp = Instantiate(prefabToSpawn, point.transform.position, Quaternion.identity);
         powerUp.GetComponent<NetworkObject>().Spawn();
 
-        //spawnPoints.Where(p => p.transform.position == point.transform.position).First().IsFree.Value = false;
         point.IsFree.Value = false;
 
         powerUp.GetComponent<PowerUp>().Init(point);
     }
 
-    //private void SpawnRandom()
-    //{
-    //    int prefabIndex = UnityEngine.Random.Range(0, powerUpPrefabs.Length);
-    //    GameObject prefabToSpawn = powerUpPrefabs[prefabIndex];
-
-    //    List<Transform> tempSpawnPoints = new List<Transform>();
-    //    foreach (Transform t in spawnPoints)
-    //    {
-    //        if(!activePowerUps.ContainsKey(t) || activePowerUps[t] == null)
-    //        {
-    //            tempSpawnPoints.Add(t);
-    //        }
-    //    }
-    //    if (tempSpawnPoints.Count == 0) return;
-
-    //    int spawnIndex = UnityEngine.Random.Range(0, tempSpawnPoints.Count);
-    //    //int spawnIndex = UnityEngine.Random.Range(0, spawnPoints.Length); 
-    //    //Transform spawnPoint = spawnPoints[spawnIndex];
-    //    Transform spawnPoint = tempSpawnPoints[spawnIndex];
-    //    GameObject powerUp = Instantiate(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
-    //    powerUp.GetComponent<NetworkObject>().Spawn(true);
-
-
-    //    activePowerUps[spawnPoint] = powerUp;
-    //    tempSpawnPoints.Clear();    
-    //    Debug.Log(transform.name);
-    //}
 }
